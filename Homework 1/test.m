@@ -44,11 +44,20 @@ kMeansStruct = load('dataset_test.mat');
 kMeansDataset = struct2dataset(kMeansStruct);
 kMeansDataset = kMeansDataset.DD;
 
-cDimens = size(kMeansDataset);
-cDimens = cDimens(1, 2);
+scatter(kMeansDataset(:,1),kMeansDataset(:,2));
+hold on;
 
-clusters = KMeans.genRndClusters(4, cDimens);
-labeledDataset = KMeans.clusterAssignmentStep(kMeansDataset, clusters);
+clusters = KMeans.genRndClusters(4, Utils.getMatRowLength(kMeansDataset));
+
+for epoch = 1:10
+    labeledDataset = KMeans.clusterAssignmentStep(kMeansDataset, clusters);
+
+    clusters = KMeans.moveClustersStep(labeledDataset, clusters);
+    
+    scatter(clusters(:,1),clusters(:,2), 70, 'filled');
+    hold on;
+end
+
 
 
 
