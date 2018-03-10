@@ -1,0 +1,26 @@
+classdef KMeans
+    
+    methods(Static)  
+        function labeledDataset = clusterAssignmentStep(dataset, clusters)
+            dataset = [dataset, zeros(1)]
+            for i = 1:length(dataset)
+                distances = [];
+                for c = 1:length(clusters)
+                    point = dataset(i, :);
+                    cluster = clusters(c, :);
+                    distance = MetricFunction.euclideanDistance(point, cluster);
+                    distances = [distances; distance];
+                end
+                [~, closestCluIDX] = min(distances);
+                dataset(i, :) = [dataset(i, :), closestCluIDX];
+                imp = dataset(i); 
+            end
+            labeledDataset = dataset;
+        end
+        
+        function clusters = genRndClusters(quantity, dimens)
+            clusters = rand(quantity, dimens); 
+        end
+    end
+end
+

@@ -44,12 +44,10 @@ classdef MetricFunction
         
         function distance = cosineDistance(rndVector1, rndVector2)
             vectorMultiplication = sum(rndVector1 .* rndVector2);
-            similarity = vectorMultiplication / sqrt((sum(rndVector1 .^ 2) * sum(rndVector2 .^ 2)));
-            % cosine distance - not a proper distance metric as it does not have the triangle inequality
-            distance = 1 - similarity;
+            similarity = vectorMultiplication / ((sum(rndVector1 .^ 2) * sum(rndVector2 .^ 2)));
             
-            % angular distance
-            % distance = acos(similarity) / pi;
+            % distance = 1 - similarity;
+            distance = cos(similarity)^(-1) / pi;
         end
     end
 end

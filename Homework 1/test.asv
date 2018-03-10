@@ -48,7 +48,7 @@ cDimens = size(kMeansDataset);
 cDimens = cDimens(1, 2);
 
 clusters = KMeans.genRndClusters(4, cDimens);
-labeledDataset = KMeans.clusterAssignmentStep(kMeansDataset, clusters);
+labeledDataset = KMeans.step1(kMeansDataset, clusters);
 
 
 
