@@ -24,7 +24,7 @@ classdef MetricFunction
         function result = canberraDistance(set1, set2)
             set3 = abs(set1 - set2);
             set4 = abs(set1) + abs(set2);
-            result = max(set3 ./ set4);
+            result = sum(set3 ./ set4);
         end
         
         function result = mahalanobisDistance(dataset, vector)
