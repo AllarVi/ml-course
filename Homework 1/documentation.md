@@ -13,16 +13,21 @@
 Table: Hyperparameters for k-means
 
 ![Result with own implementation using Euclidean distance](imgs/k_means_own_eucl.png)
+\
 
-Here green marks represent final position of centroids.
+Result with own implementation using Euclidean distance. Here green marks represent final position of centroids.
 
 ![Result with Matlab implementation](imgs/k_means_matlab_eucl.png)
+\
 
-Matlab's implementation produces identical result.
+Result with Matlab's implementation. Matlab's implementation produces identical result.
 
 ![Result with own implementation using Cosine distance](imgs/k_means_own_cos.png)
+\
 
-Euclidean distance seems to best fit the k-means in general, but here Cosine distance is used for comparison.
+Result with own implementation using Cosine distance. Euclidean distance seems to best fit the k-means in general, but here Cosine distance is used for comparison.
+
+\pagebreak
 
 ### Density based clustering using DBSCAN
 
@@ -35,3 +40,6 @@ Euclidean distance seems to best fit the k-means in general, but here Cosine dis
 Table: Hyperparameters for DBSCAN
 
 ![Result with own implementation using Euclidean distance](imgs/dbscan_own_eucl.png)
+\
+
+Result with own implementation using Euclidean distance.
