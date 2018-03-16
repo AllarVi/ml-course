@@ -41,13 +41,14 @@ dataset = [
 
 % K-means
 
-% kMeansStruct = load('dataset_test.mat');
+% Prepare data
+% kMeansStruct = load('dataset_3.mat');
 % kMeansDataset = struct2dataset(kMeansStruct);
 % kMeansDataset = kMeansDataset.DD;
-% 
+
 % scatter(kMeansDataset(:,1),kMeansDataset(:,2));
 % hold on;
-% 
+
 % clusters = KMeans.genRndClusters(4, Utils.getMatRowLength(kMeansDataset));
 % 
 % for epoch = 1:10
@@ -55,12 +56,19 @@ dataset = [
 % 
 %     clusters = KMeans.moveClustersStep(labeledDataset, clusters);
 %     
-%     scatter(clusters(:,1),clusters(:,2), 70, 'filled');
-%     hold on;
+%     % scatter(clusters(:,1),clusters(:,2), 70, 'filled');
+%     % hold on;
 % end
 
+% Matlab builtin
+% matlabResult = kmeans(kMeansDataset, 4);
+% labeledDataset = [kMeansDataset, matlabResult];
+
+% Utils.renderLabeledDataset(labeledDataset, 4); % render final labeled cluster points
+% scatter(clusters(:,1),clusters(:,2), 90, 'filled'); % render final centroids
+
 % DBSCAN
-DBSCANStruct = load('dataset_test.mat');
+DBSCANStruct = load('dataset_3.mat');
 DBSCANDataset = struct2dataset(DBSCANStruct);
 DBSCANDataset = DBSCANDataset.DD;
 
@@ -69,8 +77,8 @@ for pointIDX = 1:length(DBSCANDataset)
     DB(pointIDX) = Point(DBSCANDataset(pointIDX, :), 0, pointIDX);
 end
 
-% As a rule of thumb, minPts = 2·dim can be used
-[labeledDB, clusters] = DBSCAN.execute(DB, 3, 4);
+% % As a rule of thumb, minPts = 2·dim can be used
+[labeledDB, clusters] = DBSCAN.execute(DB, 4, 7);
 
 for clusterIDX = 1:clusters
     mask = arrayfun(@(x) x.label == clusterIDX, labeledDB);
