@@ -4,7 +4,9 @@ classdef DBSCAN
             neighbors = Point.empty;
             neighborIDX = 1;
             for pointIDX = 1:length(DB)
-                if MetricFunction.euclideanDistance(point.position, DB(pointIDX).position) <= eps
+                % points = [point.position; DB(pointIDX).position]; % for
+                % mahalanobis squared
+                if MetricFunction.canberraDistance(point.position, DB(pointIDX).position) <= eps
                     neighbors(neighborIDX) = DB(pointIDX);
                     neighborIDX = neighborIDX + 1;
                 end

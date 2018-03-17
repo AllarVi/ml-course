@@ -38,8 +38,10 @@ classdef MetricFunction
         end
         
         function distance = mahalanobisDistanceSquared(point1, point2, points)
-            covariance = cov(points);
-            distance = sqrt((point1' - point2')' * pinv(covariance) * (point1' - point2'));
+            S = cov(points);
+            
+            sub_ = (point1' - point2');
+            distance = sqrt(sub_' * pinv(S) * sub_);
         end
         
         function distance = cosineDistance(rndVector1, rndVector2)

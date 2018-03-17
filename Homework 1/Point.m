@@ -6,19 +6,18 @@ classdef Point
     end
     
     methods
-        function obj = Point(pos, l, idx)
-            obj.position = pos;
-            obj.label = l;
-            obj.index = idx;
+        function point = Point(position, label, index)
+            point.position = position;
+            point.label = label;
+            point.index = index;
         end
     end
     
     methods(Static)
-       function out = toArray(points)
-           array_long = [points.position];
-           out = zeros(length(points), 2);
-           for i = 1:length(points)
-               out(i,:) = [array_long(i*2-1) array_long(i*2)];
+       function DB = getDB(DBSCANDataset)
+           DB = Point.empty;
+           for pointIDX = 1:length(DBSCANDataset)
+               DB(pointIDX) = Point(DBSCANDataset(pointIDX, :), 0, pointIDX);
            end
        end
    end

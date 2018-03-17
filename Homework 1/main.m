@@ -1,23 +1,23 @@
 clear;
 clc;
 
-set1 = [3, 7];
-set2 = [3, 4];
+% set1 = [3, 7];
+% set2 = [3, 4];
 
 % 3dim rnd vectors
-rndVector1 = [66, 640, 44];
-rndVector2 = [64, 580, 29];
+% rndVector1 = [66, 640, 44];
+% rndVector2 = [64, 580, 29];
 
 % center point of the dataset (mean(dataset))
-dataset_mean = [68, 600, 40];
-
-dataset = [
-    64 580 29;
-    66 570 33;
-    68 590 37;
-    69 660 46;
-    73 600 55
-    ];
+% dataset_mean = [68, 600, 40];
+% 
+% dataset = [
+%     64 580 29;
+%     66 570 33;
+%     68 590 37;
+%     69 660 46;
+%     73 600 55
+%     ];
 
 % should return Euclidean Distance 3
 %euclideanDistance = MetricFunction.euclideanDistance(set1, set2);
@@ -40,6 +40,7 @@ dataset = [
 % cosDistance = MetricFunction.cosineDistance(rndVector1, rndVector2);
 
 % K-means
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Prepare data
 % kMeansStruct = load('dataset_3.mat');
@@ -49,56 +50,53 @@ dataset = [
 % scatter(kMeansDataset(:,1),kMeansDataset(:,2));
 % hold on;
 
-% clusters = KMeans.genRndClusters(4, Utils.getMatRowLength(kMeansDataset));
+% tic
+%     clusters = KMeans.genRndClusters(4, Utils.getMatRowLength(kMeansDataset));
 % 
-% for epoch = 1:10
-%     labeledDataset = KMeans.clusterAssignmentStep(kMeansDataset, clusters);
+%     for epoch = 1:10
+%         labeledDataset = KMeans.clusterAssignmentStep(kMeansDataset, clusters);
 % 
-%     clusters = KMeans.moveClustersStep(labeledDataset, clusters);
-%     
-%     % scatter(clusters(:,1),clusters(:,2), 70, 'filled');
-%     % hold on;
-% end
+%         clusters = KMeans.moveClustersStep(labeledDataset, clusters);
+% 
+%         % scatter(clusters(:,1),clusters(:,2), 70, 'filled');
+%         % hold on;
+%     end
+% toc
 
 % Matlab builtin
-% matlabResult = kmeans(kMeansDataset, 4);
+% tic
+%     matlabResult = kmeans(kMeansDataset, 4);
+% toc
 % labeledDataset = [kMeansDataset, matlabResult];
 
 % Utils.renderLabeledDataset(labeledDataset, 4); % render final labeled cluster points
 % scatter(clusters(:,1),clusters(:,2), 90, 'filled'); % render final centroids
 
 % DBSCAN
-DBSCANStruct = load('dataset_3.mat');
-DBSCANDataset = struct2dataset(DBSCANStruct);
-DBSCANDataset = DBSCANDataset.DD;
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% DBSCANStruct = load('dataset_3.mat');
+% DBSCANDataset = struct2dataset(DBSCANStruct);
+% DBSCANDataset = DBSCANDataset.DD;
 
-DB = Point.empty;
-for pointIDX = 1:length(DBSCANDataset)
-    DB(pointIDX) = Point(DBSCANDataset(pointIDX, :), 0, pointIDX);
-end
-
-% % As a rule of thumb, minPts = 2·dim can be used
-[labeledDB, clusters] = DBSCAN.execute(DB, 4, 7);
-
-for clusterIDX = 1:clusters
-    mask = arrayfun(@(x) x.label == clusterIDX, labeledDB);
-    DBSCANClusterPoints = labeledDB(mask);
-    
-    arr = Point.toArray(DBSCANClusterPoints);
-    scatter(arr(:,1),arr(:,2), 40, 'filled');
-    labelNr = DBSCANClusterPoints(1).label;
-    Legend{clusterIDX}=strcat('Label: ', num2str(labelNr));
-    hold on;
-end 
-
-mask = arrayfun(@(x) x.label == -1, labeledDB);
-DBSCANClusterPoints = labeledDB(mask);
-    
-arr = Point.toArray(DBSCANClusterPoints);
-scatter(arr(:,1),arr(:,2), 40);
-hold on;
-
-legend(Legend);
-grid on;
+% DBSCANStruct = load('data_training.mat');
+% DBSCANDataset = struct2dataset(DBSCANStruct);
+% DBSCANDataset = DBSCANDataset.dataTraining;
+% 
+% DB = Point.getDB(DBSCANDataset(:, 1:2));
+% 
+% % % As a rule of thumb, minPts = 2·dim can be used (Wikipedia)
+% tic
+% [labeledDB, clusters] = DBSCAN.execute(DB, 0.2, 4);
+% toc
+% 
+% for clusterIDX = 1:clusters
+%     labelNr = Utils.renderDBSCANClusters(labeledDB, clusterIDX);
+%     Legend{clusterIDX} = strcat('Label: ', num2str(labelNr));
+% end 
+% 
+% Utils.renderDBSCANClusters(labeledDB, -1);
+% Legend{clusterIDX + 1} = strcat('Noise: ', num2str(-1));
+% 
+% legend(Legend);
 
 
