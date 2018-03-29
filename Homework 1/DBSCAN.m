@@ -1,19 +1,20 @@
 classdef DBSCAN
     methods(Static)
-        function neighbors = RangeQuery(DB, point, eps)
+        function neighbors = RangeQuery(DB, point, eps, DBSCANDataset)
             neighbors = Point.empty;
             neighborIDX = 1;
             for pointIDX = 1:length(DB)
                 % points = [point.position; DB(pointIDX).position]; % for
                 % mahalanobis squared
-                if MetricFunction.canberraDistance(point.position, DB(pointIDX).position) <= eps
+                if MetricFunction.euclideanDistance(point.position, DB(pointIDX).position) <= eps
+                    % if MetricFunction.euclideanDistance(DBSCANDataset, point.position) <= eps
                     neighbors(neighborIDX) = DB(pointIDX);
                     neighborIDX = neighborIDX + 1;
                 end
             end
         end
-         
-        function [DB, C] = execute(DB, eps, minPts)
+        
+        function [DB, C] = execute(DB, eps, minPts, DBSCANDataset)
             C = 0; % Cluster counter
             for pointIDX = 1:length(DB)
                 fprintf('pointIDX: %f \n', pointIDX);
@@ -23,7 +24,7 @@ classdef DBSCAN
                     continue;
                 end
                 
-                neighbors = DBSCAN.RangeQuery(DB, point, eps); % Find neighbors
+                neighbors = DBSCAN.RangeQuery(DB, point, eps, DBSCANDataset); % Find neighbors
                 fprintf('neighbors: %0.1f \n', length(neighbors));
                 if length(neighbors) < minPts
                     DB(pointIDX).label = -1; % Label as Noise
@@ -45,7 +46,7 @@ classdef DBSCAN
                     seedPoint = DB(seedPoint.index);
                     
                     % fprintf('seedPoint index: %0.1f \n', seedPoint.index);
-
+                    
                     if seedPoint.label == -1
                         DB(seedPoint.index).label = C; % Change Noise to border point
                     end
@@ -55,7 +56,7 @@ classdef DBSCAN
                     end
                     
                     DB(seedPoint.index).label = C; % Label neighbor
-                    seedNeighbors = DBSCAN.RangeQuery(DB, seedPoint, eps);
+                    seedNeighbors = DBSCAN.RangeQuery(DB, seedPoint, eps, DBSCANDataset);
                     if length(seedNeighbors) >= minPts
                         seedSet = [seedSet, seedNeighbors]; % Add new neighbors to seed set
                     end

@@ -1,0 +1,3 @@
+[submodule "MBeautifier"]
+	path = MBeautifier
+	url = https://github.com/davidvarga/MBeautifier.git

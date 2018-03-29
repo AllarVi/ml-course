@@ -43,13 +43,13 @@ clc;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Prepare data
-% kMeansStruct = load('dataset_3.mat');
+% kMeansStruct = load('DD1.mat');
 % kMeansDataset = struct2dataset(kMeansStruct);
 % kMeansDataset = kMeansDataset.DD;
-
+% 
 % scatter(kMeansDataset(:,1),kMeansDataset(:,2));
 % hold on;
-
+% 
 % tic
 %     clusters = KMeans.genRndClusters(4, Utils.getMatRowLength(kMeansDataset));
 % 
@@ -62,41 +62,41 @@ clc;
 %         % hold on;
 %     end
 % toc
-
-% Matlab builtin
-% tic
-%     matlabResult = kmeans(kMeansDataset, 4);
-% toc
-% labeledDataset = [kMeansDataset, matlabResult];
-
+% 
+% % Matlab builtin
+% % tic
+% %     matlabResult = kmeans(kMeansDataset, 4);
+% % toc
+% % labeledDataset = [kMeansDataset, matlabResult];
+% 
 % Utils.renderLabeledDataset(labeledDataset, 4); % render final labeled cluster points
 % scatter(clusters(:,1),clusters(:,2), 90, 'filled'); % render final centroids
 
 % DBSCAN
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% DBSCANStruct = load('dataset_3.mat');
-% DBSCANDataset = struct2dataset(DBSCANStruct);
-% DBSCANDataset = DBSCANDataset.DD;
+DBSCANStruct = load('DD1.mat');
+DBSCANDataset = struct2dataset(DBSCANStruct);
+DBSCANDataset = DBSCANDataset.DD;
 
 % DBSCANStruct = load('data_training.mat');
 % DBSCANDataset = struct2dataset(DBSCANStruct);
 % DBSCANDataset = DBSCANDataset.dataTraining;
 % 
-% DB = Point.getDB(DBSCANDataset(:, 1:2));
-% 
-% % % As a rule of thumb, minPts = 2·dim can be used (Wikipedia)
-% tic
-% [labeledDB, clusters] = DBSCAN.execute(DB, 0.2, 4);
-% toc
-% 
-% for clusterIDX = 1:clusters
-%     labelNr = Utils.renderDBSCANClusters(labeledDB, clusterIDX);
-%     Legend{clusterIDX} = strcat('Label: ', num2str(labelNr));
-% end 
-% 
-% Utils.renderDBSCANClusters(labeledDB, -1);
-% Legend{clusterIDX + 1} = strcat('Noise: ', num2str(-1));
-% 
-% legend(Legend);
+DB = Point.getDB(DBSCANDataset(:, 1:2));
+
+% % As a rule of thumb, minPts = 2·dim can be used (Wikipedia)
+tic
+[labeledDB, clusters] = DBSCAN.execute(DB, 3, 4, DBSCANDataset);
+toc
+
+for clusterIDX = 1:clusters
+    labelNr = Utils.renderDBSCANClusters(labeledDB, clusterIDX);
+    Legend{clusterIDX} = strcat('Label: ', num2str(labelNr));
+end 
+
+Utils.renderDBSCANClusters(labeledDB, -1);
+Legend{clusterIDX + 1} = strcat('Noise: ', num2str(-1));
+
+legend(Legend);
 
 
