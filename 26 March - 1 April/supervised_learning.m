@@ -156,6 +156,21 @@ Mdl_svm = fitcsvm(DS_train, labelsDS_train, 'KernelFunction', 'gaussian');
 DS_hat = predict(Mdl_svm, DS_valid);
 [decision_boundary, out] = DecisionBoundary(DS_train, Mdl_svm, 0.1);
 
+%%% MY CODE
+new_decision_boundary = [];
+current_point = [0, 0];
+for pointIDX = 1:length(decision_boundary) - 1
+    if decision_boundary(pointIDX + 1, 1) == current_point(1, 1)
+        continue
+    end
+    current_point = decision_boundary(pointIDX, :);
+    new_decision_boundary = [new_decision_boundary; current_point];
+end
+
+decision_boundary = new_decision_boundary;
+
+%%% 
+
 fh(4) = figure(4);
 clf(figure(4))
 scatter(DS_train(:, 1), DS_train(:, 2), 10, labelsDS_train)
