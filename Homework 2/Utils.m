@@ -6,6 +6,24 @@ classdef Utils
             result = cols;
         end
         
+        function [trainingSet, testSet] = loadDataset(filename, ratio)
+            trainingSet = [];
+            testSet = [];
+            
+            knnStruct = load(filename);
+            knnDataset = struct2dataset(knnStruct);
+            knnDataset = knnDataset.DD;
+            
+            [row, ~] = size(knnDataset);
+            for i = 1:row
+                if rand() < ratio
+                    trainingSet = [trainingSet; knnDataset(i, :)];
+                else
+                    testSet = [testSet; knnDataset(i, :)];
+                end
+            end
+        end
+        
         function table = convertLabelToNumeric(table)
             labelIdx = 0;
             currentLabel = {};

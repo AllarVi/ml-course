@@ -9,6 +9,9 @@ mainfontoptions:
 
 Allar Viinamäe - 163578IAPM
 
-## k - nearest neighbors
+## k-nearest neighbors algorithm
+
+![Data preparation](img/data_prep.png)
+\
 
 ### Conclusion
