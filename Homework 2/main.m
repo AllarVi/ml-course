@@ -24,6 +24,19 @@ scatter(trainingSet(:, 1), trainingSet(:, 2), 20, 'filled');
 scatter(testSet(:, 1), testSet(:, 2), 20, 'filled');
 legend('Original', 'Training', 'Test', 'Location', 'Best');
 
-KNearestNeighbors.execute(trainingSet, testSet);
+predictions = KNearestNeighbors.execute(trainingSet, testSet);
+
+figure(2);
+title('Actual results')
+hold on;
+Utils.renderLabeledDataset(testSet, 3, 40);
+
+figure(3);
+title('Predicted results')
+hold on;
+predictedSet = testSet(:, 1:end-1);
+predictedSet = [predictedSet, predictions];
+Utils.renderLabeledDataset(predictedSet, 3, 40);
+
 
 

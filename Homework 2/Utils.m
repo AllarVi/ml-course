@@ -52,11 +52,11 @@ classdef Utils
             end
         end
         
-        function clusterPoints = renderLabeledDataset(labeledDS, clusters)
+        function clusterPoints = renderLabeledDataset(labeledDS, clusters, pointSize)
             for clusterIDX = 1:clusters
                 [~, cols] = size(labeledDS);
                 clusterPoints = labeledDS(labeledDS(:, cols) == clusterIDX, :);
-                scatter(clusterPoints(:, 1), clusterPoints(:, 2), 40, 'filled');
+                scatter(clusterPoints(:, 1), clusterPoints(:, 2), pointSize, 'filled');
                 Legend{clusterIDX} = strcat('Label: ', num2str(clusterIDX));
                 hold on;
             end

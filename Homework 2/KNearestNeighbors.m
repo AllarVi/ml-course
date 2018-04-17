@@ -1,7 +1,7 @@
 classdef KNearestNeighbors
     
     methods(Static)
-        function response = execute(trainingSet, testSet)
+        function predictions = execute(trainingSet, testSet)
             
             % generate predictions
             predictions = [];
