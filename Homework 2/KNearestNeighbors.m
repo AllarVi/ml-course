@@ -22,37 +22,37 @@ classdef KNearestNeighbors
         function accuracy = getAccuracy(testSet, predictions)
             correct = 0;
             
-           [rows, ~] = size(testSet);
-           for i = 1:rows
-               if testSet(i, end) == predictions(i)
-                   correct = correct + 1;
-               end    
-           end
-           
-           percent = (correct / rows) * 100.0;
-           accuracy = percent;
+            [rows, ~] = size(testSet);
+            for i = 1:rows
+                if testSet(i, end) == predictions(i)
+                    correct = correct + 1;
+                end
+            end
+            
+            percent = (correct / rows) * 100.0;
+            accuracy = percent;
         end
         
         function response = getResponse(neighbors)
-           [rows, ~] = size(neighbors);
-           labelVotes = zeros(1, 2); 
-           
-           for i = 1:rows
-               label = neighbors(i, end);
-               if ismember(label, labelVotes(:, 1))
-                   indeces = find(labelVotes==label);
-                   idx = indeces(1, 1);
-                   
-                   votesCount = labelVotes(idx, 2:2);
-                   votesCount = votesCount + 1;
-                   labelVotes(idx, 2) = votesCount;
-               else
-                   labelVotes = [labelVotes; label, 1];
-               end
-           end
-           
-           sorted = sortrows(labelVotes, 2, 'descend'); 
-           response = sorted(1, 1); % improve in case of tie
+            [rows, ~] = size(neighbors);
+            labelVotes = zeros(1, 2);
+            
+            for i = 1:rows
+                label = neighbors(i, end);
+                if ismember(label, labelVotes(:, 1))
+                    indeces = find(labelVotes == label);
+                    idx = indeces(1, 1);
+                    
+                    votesCount = labelVotes(idx, 2:2);
+                    votesCount = votesCount + 1;
+                    labelVotes(idx, 2) = votesCount;
+                else
+                    labelVotes = [labelVotes; label, 1];
+                end
+            end
+            
+            sorted = sortrows(labelVotes, 2, 'descend');
+            response = sorted(1, 1); % improve in case of tie
         end
         
         function neighbors = getNeighbors(trainingSet, testInstance, k)

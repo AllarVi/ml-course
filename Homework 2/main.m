@@ -37,6 +37,3 @@ hold on;
 predictedSet = testSet(:, 1:end-1);
 predictedSet = [predictedSet, predictions];
 Utils.renderLabeledDataset(predictedSet, 3, 40);
-
-
-
