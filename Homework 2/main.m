@@ -1,6 +1,14 @@
 clear;
 clc;
 
-DBSCANStruct = load('DD1.mat');
-DBSCANDataset = struct2dataset(DBSCANStruct);
-DBSCANDataset = DBSCANDataset.DD;
+%%%%%%%%%%%%%%%
+% Exercise 1. %
+%%%%%%%%%%%%%%%
+
+% DD = readtable('iris.csv');
+% DD = Utils.convertLabelToNumeric(DD);
+
+% Load data
+knnStruct = load('iris.mat');
+knnDataset = struct2dataset(knnStruct);
+knnDataset = knnDataset.DD;
