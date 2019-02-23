@@ -1,3 +1,6 @@
 [submodule "MBeautifier"]
 	path = MBeautifier
 	url = https://github.com/davidvarga/MBeautifier.git
+[submodule "iti8565-hw1"]
+	path = iti8565-hw1
+	url = git@gitlab.cs.ttu.ee:Allar.Viinamae/iti8565-hw1.git
