@@ -4,3 +4,6 @@
 [submodule "iti8565-hw1"]
 	path = iti8565-hw1
 	url = git@gitlab.cs.ttu.ee:Allar.Viinamae/iti8565-hw1.git
+[submodule "classification-dataset"]
+	path = classification-dataset
+	url = git@gitlab.cs.ttu.ee:Endrik.Linnamae/classification-dataset.git
