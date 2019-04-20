@@ -14,16 +14,20 @@ classdef SinglePerceptron
         function predictions = singlePerceptron(obj, train, test)
             predictions = [];
             
-            coefs = LinearRegression.stochastic_gradient_descent(...
+            activationFunction = @getActivation;
+            activationFunctionType = 'binaryStep';
+            
+            coefs = stochasticGradientDescent(...
                 train,...
                 obj.learning_rate,...
                 obj.n_epoch,...
-                @getActivation);
+                activationFunction,...
+                'binaryStep');
             
             for i = 1:size(test, 1)
                 row = test(i, :);
                 
-                prediction = getActivation(row, coefs, 'binaryStep');
+                prediction = activationFunction(row, coefs, activationFunctionType);
                 predictions = [predictions; prediction];
             end
         end
