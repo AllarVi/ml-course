@@ -1,5 +1,3 @@
-% this script demonstrates backpropagation on example of single neuron
-% set the limits
 clear
 clc
 
@@ -48,15 +46,15 @@ for epochIdx = 1:n_epoch
     z_predictions = SurfaceGenerator(x, y, weights);
     
     errors = z_actuals - z_predictions;
-    errors_sqr = errors.^2;
+    errorsSqr = errors.^2;
     
-    NeuronTrainingVisualisation(x, y, z_actuals, z_predictions, errors, errors_sqr);
+    NeuronTrainingVisualisation(x, y, z_actuals, z_predictions, errors, errorsSqr);
     %clf(fh(2))
     %mesh(x,y,z,'FaceAlpha',0.1)
     %hold on
     %surf(x,y,z_current,'FaceAlpha',0.7)
     %hold on
-    SSE(epochIdx) = sum(sum(errors_sqr));
+    SSE(epochIdx) = sum(sum(errorsSqr));
     
     z_actuals_vector = reshape(z_actuals, [], 1); % reshape matrix to one vector by columns
     
@@ -64,27 +62,28 @@ for epochIdx = 1:n_epoch
     for l = 1:L
         for k = 1:2
             %compute exp
-            current_exp = exp(weights(1)*XY(l, 1)+weights(2)*XY(l, 2));
+            current_exp = exp(weights(1) * XY(l, 1) + weights(2) * XY(l, 2));
+            
             jcb(l, k) = 2 * ((-z_actuals_vector(l) * XY(l, k) * current_exp) / ((current_exp + 1)^2) + (XY(l, k) * (current_exp^2)) / (current_exp + 1)^3);
         end
     end
     
     errors_vector = reshape(errors, [], 1);
     
-    weights = weights - (inv(jcb'*jcb+learningRate*eye(2)) * (2 * jcb' * errors_vector))'; % update weights
+    weights = weights - (inv(jcb'*jcb + learningRate * eye(2))* (2 * jcb'* errors_vector))'; % update weights
     
-    weights(epochIdx, :) = weights;
+    weightsHistory(epochIdx, :) = weights;
     
     pause(0.1)
 end
 
 fh(3) = figure(3);
 clf(fh(3))
-plot(weights(:, 1))
+plot(weightsHistory(:, 1))
 hold on
-plot(weights(:, 2))
+plot(weightsHistory(:, 2))
 hold on
 grid on
 xlabel('Epoch')
-ylabel('Weights')
+ylabel('weightsHistory')
 print('weights_evolution.pdf', '-dpdf', '-bestfit')
