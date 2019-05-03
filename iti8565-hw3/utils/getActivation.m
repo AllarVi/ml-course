@@ -8,6 +8,8 @@ if (activationFunction == "binaryStep")
     else
         activation = 0.0;
     end
+elseif (activationFunction == "logistic")
+    activation = 1.0 / (1.0 + exp(-prediction));
 else
     error('Error. Invalid "activationFunction" parameter!')
 end
