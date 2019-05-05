@@ -1,6 +1,10 @@
 function activation = getActivation(row, weights, activationFunction)
 % prediction/activation
-prediction = LinearRegression.predict(row, weights);
+prediction = weights(end); % first weight is bias
+
+for i = 1:length(weights) - 1
+    prediction = prediction + (weights(i) * row(i));
+end
 
 if (activationFunction == "binaryStep")
     if (prediction >= 0.0)

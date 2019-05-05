@@ -3,16 +3,17 @@ classdef NeuralNetwork
     methods(Static)
         function trainNetwork(network, train, learningRate, epochCount, outputsCount)
             for i = 1:epochCount
+                RenderUtils.plotNetwork(network);
+                
                 sumError = 0;
                 
-                for j = 1:size(train)
+                for j = 1:size(train, 1)
                     row = train(j, :);
                     
                     outputs = NeuralNetwork.forwardPropagate(row, network);
-                    expected = zeros(1, outputsCount);
                     
-                    lastEl = row(end);
-                    expected(lastEl + 1) = 1;
+                    expected = zeros(1, outputsCount);
+                    expected(row(end) + 1) = 1;
                     
                     sumError = sumError + Utils.getRSE(expected, outputs);
                     
@@ -20,7 +21,7 @@ classdef NeuralNetwork
                     
                     NeuralNetwork.updateWeights(network, row, learningRate);
                 end
-                
+               
                 fprintf('>epoch=%d, lrate=%.3f, error=%.3f \n', i, learningRate, sumError);
                 pause(1)
             end
@@ -30,7 +31,7 @@ classdef NeuralNetwork
             for i = 1:size(network, 2)
                 inputs = row(1, 1:end-1); % last input is the bias 
                 
-                if (i ~= 1) % if not first (input) layer  
+                if (i ~= 1) % if not first (hidden) layer  
                     prevLayerOutputs = [];
                     prevLayer = network{i - 1};
                     for j = 1:size(prevLayer, 2)
@@ -43,17 +44,18 @@ classdef NeuralNetwork
                 layer = network{i};
                 for neuronIdx = 1:size(layer, 2)
                     neuron = layer{neuronIdx};
+                    
                     for j = 1:length(inputs)
                         newWeight = learningRate * neuron('delta') * inputs(j);
                         neuronWeights = neuron('weights');
-                        neuronWeights(j) = newWeight;
+                        neuronWeights(j) = neuronWeights(j) + newWeight;
                         neuron('weights') = neuronWeights;
                     end
                     neuronWeights = neuron('weights');
                     newBias = learningRate * neuron('delta');
-                    neuronWeights(end) = newBias;
+                    neuronWeights(end) = neuronWeights(end) + newBias;
                     neuron('weights') = neuronWeights;
-                end  
+                end 
             end
         end
         
@@ -92,7 +94,7 @@ classdef NeuralNetwork
                     neuron = layer{j};
                     
                     neuron('delta') = errors(j) * getSigmoidDerivative(neuron('output'));
-                end
+                end                
             end
         end
         
@@ -121,17 +123,19 @@ classdef NeuralNetwork
         function network = initializeNetwork(inputsCount, hiddenCount, outputsCount)
             network = {};
             
-            hiddenLayer = NeuralNetwork.getLayer(hiddenCount, inputsCount);
+            hiddenLayer = NeuralNetwork.getLayer(hiddenCount, inputsCount, "hidden");
             network{1} = hiddenLayer;
             
-            outputLayer = NeuralNetwork.getLayer(outputsCount, hiddenCount);
+            outputLayer = NeuralNetwork.getLayer(outputsCount, hiddenCount, "output");
             network{2} = outputLayer;
         end
         
-        function layer = getLayer(neuronsCount, neuronInputsCount)
+        function layer = getLayer(neuronsCount, neuronInputsCount, layerName)
             layer = {};
             for i = 1:neuronsCount
                 neuron = containers.Map();
+                neuron('layerName') = layerName;
+                neuron('neuronIdx') = i;
                 neuron('weights') = rand(1, neuronInputsCount + 1);
                 layer{i} = neuron;
             end
