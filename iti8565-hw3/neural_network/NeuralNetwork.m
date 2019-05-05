@@ -23,7 +23,7 @@ classdef NeuralNetwork
                 end
                
                 fprintf('>epoch=%d, lrate=%.3f, error=%.3f \n', i, learningRate, sumError);
-                pause(1)
+                pause(0.25)
             end
         end
         
