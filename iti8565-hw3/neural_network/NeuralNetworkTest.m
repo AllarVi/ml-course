@@ -43,13 +43,13 @@ classdef NeuralNetworkTest < matlab.unittest.TestCase
             
             network{1} = layerHidden;
             network{2} = layerOutput;
-
+            
             outputs = NeuralNetwork.forwardPropagate([1, 0], network);
             
-            fprintf("%f ", outputs(:, :)); fprintf("\n");
+            fprintf(" %f ", outputs(:, :)); fprintf("\n");
             
-            expected = [0.662997012985289   0.725316072527975];
-            difference = max(abs(outputs(:) - expected(:))) < 0.01;
+            expected = [0.662997012985289, 0.725316072527975];
+            difference = max(abs(outputs(:)-expected(:))) < 0.01;
             assertTrue(testCase, difference)
         end
         
@@ -104,6 +104,7 @@ classdef NeuralNetworkTest < matlab.unittest.TestCase
                 8.675418651, -0.242068655, 1; ...
                 7.673756466, 3.508563011, 1];
             
+            
             datasetLinear = [2.550537003, 0; ...
                 2.362125076, 0; ...
                 4.400293529, 0; ...
@@ -114,6 +115,7 @@ classdef NeuralNetworkTest < matlab.unittest.TestCase
                 1.77106367, 1; ...
                 -0.242068655, 1; ...
                 3.508563011, 1];
+            
             
             inputsCount = size(dataset, 2) - 1;
             outputsCount = 2;
