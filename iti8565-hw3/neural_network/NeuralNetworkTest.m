@@ -77,6 +77,7 @@ classdef NeuralNetworkTest < matlab.unittest.TestCase
             
             NeuralNetwork.backwardPropagateError(network, expected);
             
+            % network printing
             for i = 1:size(network, 2)
                 layer = network{i};
                 
@@ -92,18 +93,21 @@ classdef NeuralNetworkTest < matlab.unittest.TestCase
             end
         end
         
-        function trainNetwork(testCase)
-            dataset = [2.7810836, 2.550537003, 0; ...
-                1.465489372, 2.362125076, 0; ...
-                3.396561688, 4.400293529, 0; ...
-                1.38807019, 1.850220317, 0; ...
-                3.06407232, 3.005305973, 0; ...
-                7.627531214, 2.759262235, 1; ...
-                5.332441248, 2.088626775, 1; ...
-                6.922596716, 1.77106367, 1; ...
-                8.675418651, -0.242068655, 1; ...
-                7.673756466, 3.508563011, 1];
+        function predictWithTrainedNN(testCase)
+            network = NeuralNetworkTest.initializeTrainedNN();
+            dataset = NeuralNetworkTest.initializeDataset();
             
+            for i = 1:size(dataset, 1)
+                row = dataset(i, :);
+                
+                prediction = NeuralNetwork.predict(network, row);
+                
+                fprintf('>expected=%d actual=%d \n', prediction, row(end));
+            end
+        end
+        
+        function trainNetwork(testCase)
+            dataset = NeuralNetworkTest.initializeDataset();
             
             datasetLinear = [2.550537003, 0; ...
                 2.362125076, 0; ...
@@ -127,6 +131,46 @@ classdef NeuralNetworkTest < matlab.unittest.TestCase
             learningRate = 0.5;
             
             NeuralNetwork.trainNetwork(network, dataset, learningRate, epochCount, outputsCount)
+        end
+        
+    end
+    
+    methods(Static)
+                
+        function network = initializeTrainedNN()
+            neuronHidden1 = containers.Map();
+            neuronHidden1('weights') = [-1.482313569067226, 1.8308790073202204, 1.078381922048799];
+            
+            neuronHidden2 = containers.Map();
+            neuronHidden2('weights') = [0.23244990332399884, 0.3621998343835864, 0.40289821191094327];
+            
+            neuronOutput1 = containers.Map();
+            neuronOutput1('weights') = [2.5001872433501404, 0.7887233511355132, -1.1026649757805829];
+            
+            neuronOutput2 = containers.Map();
+            neuronOutput2('weights') = [-2.429350576245497, 0.8357651039198697, 1.0699217181280656];
+            
+            layerHidden{1} = neuronHidden1;
+            layerHidden{2} = neuronHidden2;
+            
+            layerOutput{1} = neuronOutput1;
+            layerOutput{2} = neuronOutput2;
+            
+            network{1} = layerHidden;
+            network{2} = layerOutput;
+        end
+        
+        function dataset = initializeDataset()
+            dataset = [2.7810836, 2.550537003, 0; ...
+                1.465489372, 2.362125076, 0; ...
+                3.396561688, 4.400293529, 0; ...
+                1.38807019, 1.850220317, 0; ...
+                3.06407232, 3.005305973, 0; ...
+                7.627531214, 2.759262235, 1; ...
+                5.332441248, 2.088626775, 1; ...
+                6.922596716, 1.77106367, 1; ...
+                8.675418651, -0.242068655, 1; ...
+                7.673756466, 3.508563011, 1];
         end
         
     end

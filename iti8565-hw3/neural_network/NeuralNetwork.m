@@ -1,9 +1,59 @@
 classdef NeuralNetwork
     
+    properties
+      learningRate = 0;
+      epochCount = 0;
+      hiddenCount = 0;
+    end
+    
+    methods
+        function obj = NeuralNetwork(learningRate, epochCount, hiddenCount)
+            obj.learningRate = learningRate;
+            obj.epochCount = epochCount;
+            obj.hiddenCount = hiddenCount;
+        end
+        
+        function predictions = back_propagation(obj, train, test)            
+            inputsCount = size(train, 2) - 1;
+            % TODO: Remove hardcoded output counter
+            outputsCount = 2;
+            
+            network = NeuralNetwork.initializeNetwork(inputsCount, obj.hiddenCount, outputsCount);
+            
+            NeuralNetwork.trainNetwork(network, train, obj.learningRate, obj.epochCount, outputsCount)
+            
+            predictions = [];
+            
+            for i = 1:size(test, 1)
+                row = test(i, :);
+                
+                prediction = NeuralNetwork.predict(network, row);
+                predictions = [predictions; prediction];
+            end
+        end
+    end
+    
     methods(Static)
+        function prediction = predict(network, row)
+            outputs = NeuralNetwork.forwardPropagate(row, network);
+            
+            maxOutput = max(outputs);
+            
+            index = -1;
+            for i = 1:length(outputs)
+                output = outputs(:, i);
+                
+                if (output == maxOutput)
+                    index = i;
+                end
+            end
+            
+            prediction = index - 1; % minus one since indexing in matlab starts from 1
+        end
+        
         function trainNetwork(network, train, learningRate, epochCount, outputsCount)
             for i = 1:epochCount
-                RenderUtils.plotNetwork(network);
+                % RenderUtils.plotNetwork(network);
                 
                 sumError = 0;
                 
@@ -23,7 +73,7 @@ classdef NeuralNetwork
                 end
                 
                 fprintf('>epoch=%d, lrate=%.3f, error=%.3f \n', i, learningRate, sumError);
-                pause(0.25)
+                % pause(0.25)
             end
         end
         
