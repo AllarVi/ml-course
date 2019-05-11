@@ -13,7 +13,7 @@ classdef NeuralNetwork
             obj.hiddenCount = hiddenCount;
         end
         
-        function predictions = back_propagation(obj, train, test)            
+        function predictions = backPropagation(obj, train, test)            
             inputsCount = size(train, 2) - 1;
             % TODO: Remove hardcoded output counter
             outputsCount = 2;
@@ -53,7 +53,7 @@ classdef NeuralNetwork
         
         function trainNetwork(network, train, learningRate, epochCount, outputsCount)
             for i = 1:epochCount
-                % RenderUtils.plotNetwork(network);
+                RenderUtils.plotNetwork(network);
                 
                 sumError = 0;
                 
