@@ -3,14 +3,14 @@ classdef NeuralNetwork
     properties
       learningRate = 0;
       epochCount = 0;
-      hiddenCount = 0;
+      hiddenLayers = {};
     end
     
     methods
-        function obj = NeuralNetwork(learningRate, epochCount, hiddenCount)
+        function obj = NeuralNetwork(learningRate, epochCount, hiddenLayers)
             obj.learningRate = learningRate;
             obj.epochCount = epochCount;
-            obj.hiddenCount = hiddenCount;
+            obj.hiddenLayers = hiddenLayers;
         end
         
         function predictions = backPropagation(obj, train, test)            
@@ -18,7 +18,7 @@ classdef NeuralNetwork
             % TODO: Remove hardcoded output counter
             outputsCount = 2;
             
-            network = NeuralNetwork.initializeNetwork(inputsCount, obj.hiddenCount, outputsCount);
+            network = NeuralNetwork.initializeNetwork(inputsCount, outputsCount, obj.hiddenLayers);
             
             NeuralNetwork.trainNetwork(network, train, obj.learningRate, obj.epochCount, outputsCount)
             
@@ -63,6 +63,7 @@ classdef NeuralNetwork
                     outputs = NeuralNetwork.forwardPropagate(row, network);
                     
                     expected = zeros(1, outputsCount);
+                    % +1 if labels start from 0
                     expected(row(end)+1) = 1;
                     
                     sumError = sumError + Utils.getRSE(expected, outputs);
@@ -170,14 +171,30 @@ classdef NeuralNetwork
             outputs = inputs; % last inputs are the outputs of the nn
         end
         
-        function network = initializeNetwork(inputsCount, hiddenCount, outputsCount)
+        function network = initializeNetwork(firstInputsCount, outputsCount, layers)
+            % inputsCount - number of neuron's weights
+            
             network = {};
+
+            inputsCount = 0;
             
-            hiddenLayer = NeuralNetwork.getLayer(hiddenCount, inputsCount, "hidden");
-            network{1} = hiddenLayer;
+            for i = 1:size(layers, 2)
+                layerData = layers{i};
+                
+                if (i == 1)
+                    inputsCount = firstInputsCount;
+                end
+                
+                neuronCount = layerData('neuronCount');
+                layer = NeuralNetwork.getLayer(neuronCount, inputsCount, layerData('name'));
+                
+                network{i} = layer;
+                
+                inputsCount = neuronCount;
+            end
             
-            outputLayer = NeuralNetwork.getLayer(outputsCount, hiddenCount, "output");
-            network{2} = outputLayer;
+            outputLayer = NeuralNetwork.getLayer(outputsCount, inputsCount, "output");
+            network{i + 1} = outputLayer;
         end
         
         function layer = getLayer(neuronsCount, neuronInputsCount, layerName)

@@ -21,10 +21,22 @@ classdef NeuralNetworkTest < matlab.unittest.TestCase
         
         function initializeNeuralNetwork(testCase)
             inputsCount = 2;
-            hiddenCount = 1;
             outputsCount = 2;
             
-            network = NeuralNetwork.initializeNetwork(inputsCount, hiddenCount, outputsCount);
+            hiddenLayer1 = containers.Map();
+            hiddenLayer1('neuronCount') = 2;
+            hiddenLayer1('name') = 'hidden1';
+            
+            hiddenLayer2 = containers.Map();
+            hiddenLayer2('neuronCount') = 2;
+            hiddenLayer2('name') = 'hidden2';
+            
+            hiddenLayers{1} = hiddenLayer1;
+            hiddenLayers{2} = hiddenLayer2;
+            
+            network = NeuralNetwork.initializeNetwork(inputsCount, outputsCount, hiddenLayers);
+            
+            assertEqual(testCase, size(network, 2), 3);
         end
         
         function forwardPropagate(testCase)
@@ -123,9 +135,14 @@ classdef NeuralNetworkTest < matlab.unittest.TestCase
             
             inputsCount = size(dataset, 2) - 1;
             outputsCount = 2;
-            hiddenCount = 2;
             
-            network = NeuralNetwork.initializeNetwork(inputsCount, hiddenCount, outputsCount);
+            hiddenLayer1 = containers.Map();
+            hiddenLayer1('neuronCount') = 2;
+            hiddenLayer1('name') = 'hidden1';
+            
+            hiddenLayers{1} = hiddenLayer1;
+            
+            network = NeuralNetwork.initializeNetwork(inputsCount, outputsCount, hiddenLayers);
             
             epochCount = 20;
             learningRate = 0.5;
