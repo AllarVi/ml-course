@@ -1,26 +1,31 @@
 classdef RenderUtils
     
     methods(Static)
-        function plotNeuron(totalLayersCount, layerPlotMatrix, neuronInLayerIdx)
+        function plotNeuron(totalLayersCount, layerPlotMatrix, neuronInLayerIdx, totalNeuronIdx)
             plot(layerPlotMatrix(1, :, neuronInLayerIdx), layerPlotMatrix(2, :, neuronInLayerIdx));
             
-            neuronTitle = sprintf('neuron=%d, total layers=%d', neuronInLayerIdx, totalLayersCount);
+            neuronTitle = sprintf('%d, in layer=%d, layers=%d', totalNeuronIdx, neuronInLayerIdx, totalLayersCount);
             title(neuronTitle);
         end
         
         function plotLayer(layerPlotMatrix, totalLayersCount, totalNeuronIndeces)
             for i = 1:length(totalNeuronIndeces)
-                subplot(totalLayersCount, 2, totalNeuronIndeces(:, i));
+                totalNeuronIdx = totalNeuronIndeces(:, i);
+                
+                subplot(totalLayersCount, 2, totalNeuronIdx);
                 hold on;
                 
-                RenderUtils.plotNeuron(totalLayersCount, layerPlotMatrix, i);
+                RenderUtils.plotNeuron(totalLayersCount, layerPlotMatrix, i, totalNeuronIdx);
             end
         end
         
-        function plotNetwork(network)
+        function plotNetwork(network, isNewNetwork)
             layersCount = size(network, 2);
             
-            figure(1)
+            if (isNewNetwork)
+                figure;
+            end
+            
             for i = 1:layersCount
                 layerPlotMatrix = RenderUtils.getLayerPlotMatrix(network, i);
                 neuronsCount = size(layerPlotMatrix, 3);

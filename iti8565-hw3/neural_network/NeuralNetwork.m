@@ -54,7 +54,11 @@ classdef NeuralNetwork
         
         function trainNetwork(network, train, learningRate, epochCount, outputsCount)
             for i = 1:epochCount
-                RenderUtils.plotNetwork(network);
+                if (i == 1)
+                    RenderUtils.plotNetwork(network, true);
+                else
+                    RenderUtils.plotNetwork(network, false);
+                end
                 
                 sumError = 0;
                 
