@@ -134,7 +134,7 @@ classdef NeuralNetworkTest < matlab.unittest.TestCase
             
             
             inputsCount = size(dataset, 2) - 1;
-            outputsCount = 2;
+            outputsCount = length(unique(dataset(:, end)));
             
             hiddenLayer1 = containers.Map();
             hiddenLayer1('neuronCount') = 2;

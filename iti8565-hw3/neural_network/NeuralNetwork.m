@@ -15,8 +15,9 @@ classdef NeuralNetwork
         
         function predictions = backPropagation(obj, train, test)            
             inputsCount = size(train, 2) - 1;
-            % TODO: Remove hardcoded output counter
-            outputsCount = 2;
+            
+            classValues = unique(train(:, end));
+            outputsCount = length(classValues);
             
             network = NeuralNetwork.initializeNetwork(inputsCount, outputsCount, obj.hiddenLayers);
             
